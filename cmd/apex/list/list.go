@@ -100,8 +100,23 @@ func outputList() {
 			continue // ignore
 		}
 
-		fmt.Printf("    current version: %s\n", *config.Configuration.Version)
+		aliaslist, err := fn.GetAliases()
+		if err != nil {
+			continue
+		}
 
+		var aliases string
+		for index, alias := range aliaslist.Aliases {
+			if index > 0 {
+				aliases += ", "
+			}
+			aliases += fmt.Sprintf("%s@v%s", *alias.Name, *alias.FunctionVersion)
+		}
+		if aliases == "" {
+			aliases = "<none>"
+		}
+		fmt.Printf("    aliases: %s\n", aliases)
+		fmt.Printf("    current version: %s\n", *config.Configuration.Version)
 		fmt.Println()
 	}
 }
